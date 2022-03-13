@@ -1,0 +1,31 @@
+version: '2.4'
+
+services:
+  code:
+    image: "web_scraper:latest"
+    build:
+      context: .
+      dockerfile: Dockerfile
+      network: host
+    network_mode: "host"
+    depends_on:
+      - redis
+
+  redis:
+    image: 'bitnami/redis:5.0'
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    ports:
+      - 6379:6379
+
+  worker:
+    image: 'worker'
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+      network: host
+    network_mode: "host"
+    depends_on:
+      - redis

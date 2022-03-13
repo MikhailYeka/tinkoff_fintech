@@ -1,0 +1,4 @@
+FROM web_scraper:latest
+
+ENTRYPOINT [""]
+CMD ["make", "worker"]
